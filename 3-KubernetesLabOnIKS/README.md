@@ -141,7 +141,7 @@ If you get an error, go to the PrepareLab.MD file to understand how to install d
 
 
 
-### 2. Check that ibmcloud cs and ibmcloud cr have been installed
+### 2. Check that ibmcloud ks (K8S service) and ibmcloud cr (container registry) have been installed
 
 `ibmcloud plugin list`
 
@@ -197,16 +197,16 @@ Log into your IBM Cloud account if no already logged in.
 
 Then go to your Cluster Region :
 
-`ibmcloud cs region-set uk-south`
+`ibmcloud ks region-set uk-south`
 
 Set the context for the cluster in your CLI.
 
-`ibmcloud cs cluster-config mycluster`
+`ibmcloud ks cluster-config mycluster`
 
 Output:
 
 ``` bash
-> ibmcloud cs cluster-config mycluster
+> ibmcloud ks cluster-config mycluster
 OK
 
 The configuration for mycluster was downloaded successfully. Export environment variables to start using Kubernetes.

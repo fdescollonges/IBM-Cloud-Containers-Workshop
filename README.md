@@ -41,4 +41,12 @@ version 1.0
   + _**Demos** Prometheus / Grafana_
 + Wrap Up
 
+
+
+**LECTURES :**
+
+**<https://github.com/fdescollonges/IBM-Cloud-Containers-Workshop/tree/master/Lectures>**
+
+
+
 ---
