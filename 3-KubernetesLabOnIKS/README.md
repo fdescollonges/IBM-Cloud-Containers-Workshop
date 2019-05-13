@@ -218,6 +218,30 @@ export KUBECONFIG=/Users/phil/.bluemix/plugins/container-service/clusters/myclus
 
  `export KUBECONFIG=/Users/phil/.bluemix/plugins/container-service/clusters/mycluster/kube-config-mil01-mycluster.yml`
 
+On windows, you will get the following result : 
+
+```
+PS C:\Data\iksdemo> ibmcloud ks cluster-config iksdemocluster
+OK
+The configuration for iksdemocluster was downloaded successfully.
+
+Export environment variables to start using Kubernetes.
+
+SET KUBECONFIG=C:\Users\FRANCKDescollonges\.bluemix\plugins\container-service\clusters\iksdemocluster\kube-config-dal10-iksdemocluster.yml
+```
+
+With "cmd" shell, use `SET` command like described in the output of the *cluster-config* command : 
+
+```
+SET KUBECONFIG=C:\Users\FRANCKDescollonges\.bluemix\plugins\container-service\clusters\iksdemocluster\kube-config-dal10-iksdemocluster.yml
+```
+
+On windows, with **<u>powershell</u>**, replace `SET KUBECONFIG` with `$Env:KUBECONFIG` (watch out spaces and quotes): 
+
+```
+$Env:KUBECONFIG = "C:\Users\FRANCKDescollonges\.bluemix\plugins\container-service\clusters\iksdemocluster\kube-config-dal10-iksdemocluster.yml"
+```
+
  Verify that you can connect to your cluster by listing your worker nodes.
 
  `kubectl get nodes`
