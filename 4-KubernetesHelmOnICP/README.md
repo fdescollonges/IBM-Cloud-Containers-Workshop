@@ -1533,11 +1533,11 @@ Congratulations, you have successfully completed this Containers lab ! You've de
 You need to setup the endpoint to tell the kubectl command where is the ICP Cluster and what are the correct certificates.
 To do so, go to the ICP console and select your profile on the right hand:
 
-![Configure Client](../images/Client.png)
+![Configure Client](../images/client.png)
 
 Click on Configure client:
 
-![Configure Client](../images/ClientSetup.png)
+![Configure Client](../images/clientsetup.png)
 
 These 5 lines contain a token that change every **12 hours**. So then, you generally have to use these 5 commands to get connected.
 
