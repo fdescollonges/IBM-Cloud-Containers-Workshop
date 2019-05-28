@@ -25,7 +25,7 @@ version 1.0
 **Day Two**
 + _Helm overview_
   + Kubernetes & Helm **Lab** on ICP
-  + https://github.com/fdescollonges/IBM-Cloud-Containers-Workshop/tree/master/4-KubernetesHelmOnICP
+  + [https://github.com/fdescollonges/IBM-Cloud-Containers-Workshop/tree/master/4-KubernetesHelmOnICP](https://github.com/fdescollonges/IBM-Cloud-Containers-Workshop/tree/master/4-KubernetesHelmOnICP)
   + <https://fdescollonges.github.io/IBM-Cloud-Containers-Workshop/5-HybridCloudLab/>
 + _Application Patterns_
   + MicroServices /Cloud Native Applications
