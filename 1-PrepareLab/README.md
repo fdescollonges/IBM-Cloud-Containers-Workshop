@@ -11,7 +11,7 @@
 Before you can run all the labs about containers in IBM Cloud, you should prepare your environment to execute those labs. Check the following instructions.
 
 
-# Task 1. IBM Cloud registration
+## Task 1. IBM Cloud registration
 
 Labs are running on the **IBM Cloud** (ex Bluemix).
 
@@ -82,7 +82,7 @@ You are now connected (and registred) to the IBM Cloud.
 > IMPORTANT : Take a note of your email address and your password.
 
 
-# Task 2. Apply a promo code (if necessary)
+## Task 2. Apply a promo code (if you don't already have a paid account)
 
 Check if you can access to **Containers in Kubernetes Clusters**.
 To do so, click on **Catalog** and click on **Containers** on the left pane of the page :
@@ -120,146 +120,63 @@ Go back to the **Catalog** and check that now you have access to **Containers in
 
 ![Kubernetes](./../images/kcheck.png)
 
-# Task 3. Install Docker Desktop on your Mac
+## Task 3. Connect to you Virtual Server
 
-Follow this procedure to install the latest Docker Desktop (ex Community Edition) on your Mac (**for Windows**, jump to the next session) 
+For this workshop, we created a virtual server running in IBM Cloud infrastructure for you. It is a linux based VM with 16vCPU and 32GB of RAM. Your instructors have provided you the IP address and the root password of your instance. 
 
-Docker Desktop for Mac is favailable for free.
+Use `ssh` to connect the server : 
 
-https://store.docker.com/editions/community/docker-ce-desktop-mac
+```
+ssh root@ip_address
+```
 
-![image-20190118113648920](../images/image-20190118113648920-7807808.png)
+You might need to disable key checking by using the following command : 
 
-Click on the blue button **Please Login to Download**. If you are not registred to the Docker site, then create an account. Then when you are registered and logged in, click on the **Get Docker ** button.
+```
+ssh -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null" root@ip_address
+```
 
-![image-20190118113959736](../images/image-20190118113959736-7807999.png)
-
-Double-click **Docker.dmg** to start the install process.
-
-When the installation completes and Docker starts, the whale in the top status bar shows that Docker is running, and accessible from a terminal.
-
-![Docker for Mac is ready](./../images/install2docker.png)
-
-Open a terminal and type :
+Check that Docker is already installed
 
 `docker version`
 
 You should see something similar to this screen :
+
 ```console
-> docker version
-Client: Docker Engine - Community
- Version:           18.09.1
- API version:       1.39
- Go version:        go1.10.6
- Git commit:        4c52b90
- Built:             Wed Jan  9 19:33:12 2019
- OS/Arch:           darwin/amd64
- Experimental:      false
+root@iccws-polx-01:~# docker version
+Client:
+ Version:      18.03.1-ce
+ API version:  1.37
+ Go version:   go1.9.5
+ Git commit:   9ee9f40
+ Built:        Thu Apr 26 07:17:20 2018
+ OS/Arch:      linux/amd64
+ Experimental: false
+ Orchestrator: swarm
 
-Server: Docker Engine - Community
+Server:
  Engine:
-  Version:          18.09.1
-  API version:      1.39 (minimum version 1.12)
-  Go version:       go1.10.6
-  Git commit:       4c52b90
-  Built:            Wed Jan  9 19:41:49 2019
-  OS/Arch:          linux/amd64
-  Experimental:     true
-
+  Version:      18.03.1-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.9.5
+  Git commit:   9ee9f40
+  Built:        Thu Apr 26 07:15:30 2018
+  OS/Arch:      linux/amd64
+  Experimental: false
 ```
-> Note that you should always have the client and the server running.
 
-> The Docker server contains the **Docker engine**(containerd) that controls running containers. 
-
-
-# Task 4. Install Docker Desktop on Windows
-
-Follow this procedure to install the latest Docker Desktop (ex Community Edition) on Windows (for Mac, jump to the previous session) 
-
-Docker Desktop for Windows is available for free.
-
-https://store.docker.com/editions/community/docker-ce-desktop-windows
-
-![image-20190118115800766](../images/image-20190118115800766-7809080.png)
-
-Click on the blue button **Please Login to Download**. If you are **not** registred to the Docker site, then create an account. Then when you are registered and logged in, click on the **Get Docker ** button.
-
-![image-20190118114556568](../images/image-20190118114556568-7808356.png)
-
-Leave the default parameters: 
-
-![Docker for Windows](./../images/dockerwindows2.png)
-
-After download, install Docker Desktop:
-
-**Double-click Docker for Windows Installer** to run the installer.
-
-> **IMPORTANT**: During the installation process, you may be informed the installer will reboot your workstation to install the virtualization feature of your PC. 
-
-
-When the installation finishes, Docker starts automatically. The **whale** in the notification area indicates that Docker is running, and accessible from a terminal.
-
-Open a command-line terminal like PowerShell, and try out some Docker commands!
-
-Run docker version to check the version.
-
-`docker version`
-
-You should see something similar to this screen :
-```console
-> docker version
-Client: Docker Engine - Community
- Version:           18.09.1
- API version:       1.39
- Go version:        go1.10.6
- Git commit:        4c52b90
- Built:             Wed Jan  9 19:33:12 2019
- OS/Arch:           darwin/amd64
- Experimental:      false
-
-Server: Docker Engine - Community
- Engine:
-  Version:          18.09.1
-  API version:      1.39 (minimum version 1.12)
-  Go version:       go1.10.6
-  Git commit:       4c52b90
-  Built:            Wed Jan  9 19:41:49 2019
-  OS/Arch:          linux/amd64
-  Experimental:     true
-```
-> Note that you should always have the client and the server running.
-
+> Note that you should always have the client and the server running. 
+>
 > The Docker server contains the **Docker engine** (containerd) that controls running containers. 
 
-# Task 5. Install Git on your laptop
-
-To do so : 
-
-For MacOS :
-http://mac.github.com
-
-For Windows: 
-http://git-scm.com/download/win
-
-At some point during the installation, change to the **"Use Windows default console"** and continue the installation.
-![Git for Windows](./git2.png)
-
-
-
-# Task 6. Install the ibmcloud commands
+## Task 3. Install the ibmcloud commands
 
 The **ibmcloud** command line interface (CLI) provides a set of commands that are grouped by namespace for users to interact with IBM Cloud. In previous versions, the name of that command was "bluemix" or "bx".
 
 You install a set of IBM Cloud commands and tools, verify the installation, and configure your environment. IBM® Cloud developer tools offer a command-line approach to creating, developing, and deploying end-to-end web, mobile, and microservice applications.
 
-For MacOS or Linux (run as root) :
+On Linux (run as root) :
 `curl -sL https://ibm.biz/idt-installer | bash`
-
-For Windows in PowerShell (run as Administrator - your system will be rebooted at the end of installation) : 
-
-```
-Set-ExecutionPolicy Unrestricted; iex(New-Object Net.WebClient).DownloadString('http://ibm.biz/idt-win-installer')
-```
 
 Results:
 
@@ -391,64 +308,62 @@ You can also verify your CLI installation by typing:
 Results:
 
 ```console
-ibmcloud plugin list
+root@iccws-polx-01:~# ibmcloud plugin list
 Listing installed plug-ins...
 
-Plugin Name                            Version   
-container-registry                     0.1.339   
-container-service/kubernetes-service   0.1.581   
-...
+Plugin Name                            Version   Status
+container-service/kubernetes-service   0.3.49
+dev                                    2.2.0
+sdk-gen                                0.1.12
+cloud-functions/wsk/functions/fn       1.0.32
+cloud-object-storage                   1.0.0
+container-registry                     0.1.391
+
 ```
 
 > You should get at least these 2 plugins installed : **container-registry** and **container-service/kubernetes-service**
 
 
 
-
-
-# Task 7. Login to IBM Cloud
+## Task 4. Login to IBM Cloud
 
 For these labs, we have decided to login to the **London Data Center** (api.eu-gb.bluemix.net). 
 
 Login to IBM Cloud with the ibmcloud command :
 
- `ibmcloud login -a api.eu-gb.bluemix.net`
+ `ibmcloud login -r eu-gb`
 
  And answer a few questions: email, password :
 
 ```console
-> ibmcloud login -a api.eu-gb.bluemix.net
-API endpoint: api.eu-gb.bluemix.net
+# ibmcloud login -r eu-gb
+API endpoint: https://cloud.ibm.com
 
-Email> cugebezaza@utooemail.com
+Email> tufih@mailfavorite.com
 
-Password> 
-Authenticating...
-Credentials were rejected.
-Code: BXNIM0602E, message: The credentials you entered for the user 'cugebezaza@utooemail.com' are incorrect
-
-Password> 
+Password>
 Authenticating...
 OK
 
-Targeted account Philippe Smith's Account (828b1270b40247a897d94167c14051bc)
+Targeted account ICCWS ICCWS's Account (95f04fe00e284449bd3990ee72688be3)
 
 Targeted resource group Default
 
-                      
-API endpoint:      https://api.eu-gb.bluemix.net   
-Region:            eu-gb   
-User:              cugebezaza@utooemail.com   
-Account:           Philippe Smith's Account (828b1270b40247a897d94167c14051bc)   
-Resource group:    Default   
-CF API endpoint:      
-Org:                  
-Space:                
+Targeted region eu-gb
+
+
+API endpoint:      https://cloud.ibm.com
+Region:            eu-gb
+User:              tufih@mailfavorite.com
+Account:           ICCWS ICCWS's Account (95f04fe00e284449bd3990ee72688be3)
+Resource group:    Default
+CF API endpoint:
+Org:
+Space:
 
 Tip: If you are managing Cloud Foundry applications and services
 - Use 'ibmcloud target --cf' to target Cloud Foundry org/space interactively, or use 'ibmcloud target --cf-api ENDPOINT -o ORG -s SPACE' to target the org/space.
 - Use 'ibmcloud cf' if you want to run the Cloud Foundry CLI with current IBM Cloud CLI context.
-
 ```
 
 
@@ -464,41 +379,163 @@ or
 Results:
 
  ```console 
-> ibmcloud target -o cugebezaza@utooemail.com -s dev
+# ibmcloud target --cf
 Targeted Cloud Foundry (https://api.eu-gb.bluemix.net)
 
-Targeted org cugebezaza@utooemail.com
+Targeted org tufih@mailfavorite.com
 
 Targeted space dev
-                      
-API endpoint:      https://api.eu-gb.bluemix.net   
-Region:            eu-gb   
-User:              cugebezaza@utooemail.com   
-Account:           Philippe Smith's Account (828b1270b40247a897d94167c14051bc)   
-Resource group:    Default   
-CF API endpoint:   https://api.eu-gb.bluemix.net (API version: 2.106.0)   
-Org:               cugebezaza@utooemail.com   
-Space:             dev   
+
+
+
+API endpoint:      https://cloud.ibm.com
+Region:            eu-gb
+User:              tufih@mailfavorite.com
+Account:           ICCWS ICCWS's Account (95f04fe00e284449bd3990ee72688be3)
+Resource group:    Default
+CF API endpoint:   https://api.eu-gb.bluemix.net (API version: 2.128.0)
+Org:               tufih@mailfavorite.com
+Space:             dev
 
  ```
-
-
-
-
-# Task 8. Conclusion
-
-###  Results
-<span style="background-color:yellow;">Successful exercise ! </span>
+## Task 8. Conclusion
 You finally went thru the following features :
+
 - [x] You registered to IBM Cloud
 - [x] You applied a promo code
-- [x] You installed Docker on your laptop
-- [x] You installed Git
 - [x] You installed the ibmcloud commands
 - [x] You login to IBM Cloud successfully
 - [x] You are ready for the labs
+
+  
 ---
 # End of the lab
+
+## APPENDIX 1 : Install Docker Desktop on your Mac (optional)
+
+Follow this procedure to install the latest Docker Desktop (ex Community Edition) on your Mac (**for Windows**, jump to the next session) 
+
+Docker Desktop for Mac is favailable for free.
+
+https://store.docker.com/editions/community/docker-ce-desktop-mac
+
+![image-20190118113648920](../images/image-20190118113648920-7807808.png)
+
+Click on the blue button **Please Login to Download**. If you are not registred to the Docker site, then create an account. Then when you are registered and logged in, click on the **Get Docker ** button.
+
+![image-20190118113959736](../images/image-20190118113959736-7807999.png)
+
+Double-click **Docker.dmg** to start the install process.
+
+When the installation completes and Docker starts, the whale in the top status bar shows that Docker is running, and accessible from a terminal.
+
+![Docker for Mac is ready](../images/install2docker.png)
+
+Open a terminal and type :
+
+`docker version`
+
+You should see something similar to this screen :
+
+```console
+> docker version
+Client: Docker Engine - Community
+ Version:           18.09.1
+ API version:       1.39
+ Go version:        go1.10.6
+ Git commit:        4c52b90
+ Built:             Wed Jan  9 19:33:12 2019
+ OS/Arch:           darwin/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.1
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.6
+  Git commit:       4c52b90
+  Built:            Wed Jan  9 19:41:49 2019
+  OS/Arch:          linux/amd64
+  Experimental:     true
+
+```
+
+> Note that you should always have the client and the server running.
+
+> The Docker server contains the **Docker engine**(containerd) that controls running containers. 
+
+## APPENDIX 2 : Install Docker Desktop on Windows
+
+Follow this procedure to install the latest Docker Desktop (ex Community Edition) on Windows (for Mac, jump to the previous session) 
+
+Docker Desktop for Windows is available for free.
+
+https://store.docker.com/editions/community/docker-ce-desktop-windows
+
+![image-20190118115800766](../images/image-20190118115800766-7809080.png)
+
+Click on the blue button **Please Login to Download**. If you are **not** registred to the Docker site, then create an account. Then when you are registered and logged in, click on the **Get Docker ** button.
+
+![image-20190118114556568](../images/image-20190118114556568-7808356.png)
+
+Leave the default parameters: 
+
+![Docker for Windows](../images/dockerwindows2.png)
+
+After download, install Docker Desktop:
+
+**Double-click Docker for Windows Installer** to run the installer.
+
+> **IMPORTANT**: During the installation process, you may be informed the installer will reboot your workstation to install the virtualization feature of your PC. 
+
+When the installation finishes, Docker starts automatically. The **whale** in the notification area indicates that Docker is running, and accessible from a terminal.
+
+Open a command-line terminal like PowerShell, and try out some Docker commands!
+
+Run docker version to check the version.
+
+`docker version`
+
+You should see something similar to this screen :
+
+```console
+> docker version
+Client: Docker Engine - Community
+ Version:           18.09.1
+ API version:       1.39
+ Go version:        go1.10.6
+ Git commit:        4c52b90
+ Built:             Wed Jan  9 19:33:12 2019
+ OS/Arch:           darwin/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.1
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.6
+  Git commit:       4c52b90
+  Built:            Wed Jan  9 19:41:49 2019
+  OS/Arch:          linux/amd64
+  Experimental:     true
+```
+
+> Note that you should always have the client and the server running.
+>
+> The Docker server contains the **Docker engine** (containerd) that controls running containers. 
+
+## APPENDIX 3 : Install Git on your laptop
+
+To do so : 
+
+For MacOS :
+http://mac.github.com
+
+For Windows: 
+http://git-scm.com/download/win
+
+At some point during the installation, change to the **"Use Windows default console"** and continue the installation.
+
 ---
 # IBM Cloud Container Workshop
 ---

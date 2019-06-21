@@ -9,7 +9,7 @@
 
 ---
 
-This lab is compatible with ICP version 3.1.2
+This lab is compatible with ICP version 3.2.0
 
 ![image-20181130211541303](../images/image-20181130211541303.png)
 
@@ -72,7 +72,7 @@ In this lab, all nodes will be part of a single VM.
 
 Using Terraform ( see [https://developer.ibm.com/recipes/tutorials/infrastructure-automation-with-terraform-on-ibm-cloud-iaas/](https://developer.ibm.com/recipes/tutorials/infrastructure-automation-with-terraform-on-ibm-cloud-iaas/) ), we instantiated for you a **virtual server** (16CPU - 32GB RAM - 400GB Disk - 1GB Network speed - Ubuntu 16.04.5 LTS) on IBM Cloud infrastructure (IaaS).
 
-We already have installed **ICP 3.1.2** on it. If you want to have more information on the ICP installation, have a look at : [https://github.com/phthom/icp31/blob/master/1-Installation.md](https://github.com/phthom/icp31/blob/master/1-Installation.md)
+We already have installed **ICP 3.2.0** on it. If you want to have more information on the ICP installation, have a look at : [https://github.com/phthom/icp31/blob/master/1-Installation.md](https://github.com/phthom/icp31/blob/master/1-Installation.md)
 
 You will need **ssh** (or **putty**  ( https://www.putty.org/ )) to access this VM using the **IP address and the root password** the instructors gave you.
 
@@ -88,13 +88,17 @@ From your web browser, go the following address where *ipaddress* is the IP your
 
 You should receive the **Welcome Page**:
 
-![Welcome to ICP](../images/Welcome.png)
+![1561018136931](../images/1561018136931.png)
 
-Click on the **Catalog** menu (top right) to look at the list of applications already installed:
 
-![Menu](../images/Hamburger.png)
 
-The **Catalog** shows Charts that you can visit (it could take au few seconds to refresh the first time)
+![1561018189659](../images/1561018189659.png)
+
+Click on the **Catalog** menu (top right) to look at the list of applications already installed :
+
+![1561018292132](../images/1561018292132.png)
+
+The **Catalog** shows Charts that you can visit (it could take a few seconds to refresh the first time)
 
 You can look at the (helm) catalog and visit some entries (but don't create any application at the moment).
 
@@ -105,6 +109,8 @@ We now need to configure kubectl to get access to the cluster. An alternative me
 On the provided virtual server, we are using a **script** created for you to help to connect to the cluster
 
 Run : 
+
+`cd`
 
 `cat ~/connect2icp.sh`
 
@@ -150,47 +156,26 @@ Results :
 
 ```console
 # kubectl version --short
-Client Version: v1.12.3
-Server Version: v1.12.3+icp
+Client Version: v1.13.5+icp
+Server Version: v1.13.5+icp
 ```
 
-Try this command to show all the worker nodes :
+> **Note :**  If you have done the previous lab on IKS, you will have the following configuration. 
 
-`kubectl get nodes`
+```
+# kubectl version --short
 
-Results :
-
-```console
-# kubectl get nodes
-NAME            STATUS    ROLES     AGE       VERSION
-169.50.200.70   Ready     etcd,management,master,proxy,worker   35m       v1.12.3+icp
+Client Version: v1.13.5+icp
+Server Version: v1.13.7+IKS
 ```
 
-> After a long period of inactivity, if you see some connection error when typing a kubectl command then re-execute the `~/connect2icp.sh` command.
-
-To get help from the kubectl, just type this command:
-
-`kubectl`
+You need to log
 
 ### ICP Command line tool : cloudctl
 
 This command can be used to configure and manage IBM Cloud Private. We have also installed the **cloudctl** command on the virtual server you will use.
 
-If you need to install cloudctl, type the following curl command : (don't forget to change the ipaddress):
-
-`curl -kLo cloudctl-linux-amd64-3.1.2-1203 https://ipaddress:8443/api/cli/cloudctl-linux-amd64`
-
-Results:
-
-```console 
-curl -kLo cloudctl-linux-amd64-3.1.0-715 https://169.50.200.70:8443/api/cli/cloudctl-linux-amd64
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-100 13.9M  100 13.9M    0     0  38.4M      0 --:--:-- --:--:-- --:--:-- 38.4M
-
-```
-
-Now execute the following commands to change cloudctl to executable and to move that CLI to the right directory :
+If you need to install cloudctl locally, look at the appendix at the end of this lab
 
 ```
 chmod 755 /root/cloudctl-linux-amd64-3.1.2-1203
@@ -212,23 +197,27 @@ USAGE:
 [environment variables] cloudctl [global options] command [arguments...] [command options]
 
 VERSION:
-   3.1.0-715+e4d4ee1d28cc2a588dabc0f54067841ad6c36ec9
+   v3.2.0-634+de52bd77a803c0a673b9bfb7368fc8bfc7483e48
 
 COMMANDS:
-   api       View the API endpoint and API version for the service.
-   catalog   Manage catalog
-   cm        Manage cluster
-   config    Write default values to the config
-   iam       Manage identities and access to resources
-   login     Log user in.
-   logout    Log user out.
-   plugin    Manage plugins
-   pm        Manage passwords
-   target    Set or view the targeted namespace
-   tokens    Display the oauth tokens for the current session. Run cloudctl login to retrieve the tokens.
-   version   Check cli and api version compatibility
-   help      
-   
+   api          View the API endpoint and API version for the service.
+   catalog      Manage catalog
+   cm           Manage cluster
+   completion   Generate an auto-completion script for the specified shell (bash or zsh).
+   config       Write default values to the configuration.
+   helm-init    Prints the configuration of the HELM_HOST setting for Helm.
+   iam          Manage identities and access to resources
+   login        Log user in.
+   logout       Log user out.
+   mc           Multicluster Manager commands
+   metering     Download Metering reports
+   plugin       Manage plugins
+   pm           Manage passwords
+   target       Set or view the targeted namespace.
+   tokens       Display the OAuth tokens for the current session. Run `cloudctl login` to retrieve the tokens.
+   version      Check CLI and API version compatibility.
+   help
+
 Enter 'cloudctl help [command]' for more information about a command.
 
 ENVIRONMENT VARIABLES:
@@ -255,23 +244,25 @@ Before using the **cloudctl** with the master, you must login to the master:
 
 Username> admin
 
-Password> 
+Password>
 Authenticating...
 OK
 
-Select an account:
-1. mycluster Account (id-mycluster-account)
-Enter a number> 1
 Targeted account mycluster Account (id-mycluster-account)
 
 Select a namespace:
 1. cert-manager
 2. default
-3. istio-system
-4. kube-public
-5. kube-system
-6. platform
-7. services
+3. ibmcom
+4. icp-system
+5. istio-system
+6. kube-public
+7. kube-system
+8. microclimate
+9. microclimate-pipeline-deployments
+10. multicluster-endpoint
+11. services
+12. ws-icp
 Enter a number> 2
 Targeted namespace default
 
@@ -289,6 +280,24 @@ Configuring helm: /root/.helm
 OK
 
 ```
+
+Try this command to show all the worker nodes :
+
+`kubectl get nodes`
+
+Results :
+
+```console
+# kubectl get nodes
+NAME            STATUS   ROLES                                 AGE   VERSION
+169.50.200.91   Ready    etcd,management,master,proxy,worker   46h   v1.13.5+icp
+```
+
+> After a long period of inactivity, if you see some connection error when typing a kubectl command then re-execute the `~/connect2icp.sh` command.
+
+To get help from the kubectl, just type this command:
+
+`kubectl`
 
 With that **cloudctl cm** CLI, you can manage the infrastructure part of the cluster like adding new worker nodes (machine-type-add, worker-add) and so on.
 
@@ -763,6 +772,14 @@ hello-world-1663871401   0         0         0         1h
 hello-world-3254495675   10        10        10        1m
 ```
 
+or view in the console : 
+
+![1561020653886](../images/1561020653886.png)
+
+![1561020767253](../1561020767253.png)
+
+
+
 Create a new service:
 
 `kubectl expose deployment/hello-world --type=NodePort --port=8080 --name=hello-world-service --target-port=8080`
@@ -770,7 +787,12 @@ Create a new service:
 Take a note of the NodePort in the description. The NodePord is working against the public IP address of the worker node (in this case this is our unique **ipaddress**)
 
 > Reminder : use `kubectl describe service` 
->
+
+Or go to the ICP Console, *Workloads* -> *Deployments* and click on *Launch* at the end of the `hello-world` line : 
+
+![1561021170117](assets/1561021170117.png)
+
+![1561021204305](../images/1561021204305.png)
 
 Perform a curl `http://ipaddress:<nodeport>` to confirm your new code is active or open a browser and you see "Great Job for the second stage".
 
@@ -873,9 +895,9 @@ The push refers to repository [mycluster.icp:8500/default/hello-world]
 
 Type https://ipaddress:8443
 
-	- Select **Menu > Container Images**
-	- Click on the `default/hello-world`
-	- Check version 2 and Latest are in the Tags
+Select **Menu > Container Images**
+- Click on the `default/hello-world`
+- Check version 2 and Latest are in the Tags
 
 ![New version](./../images/version.png)
 
@@ -987,7 +1009,7 @@ Now that you have understood the structure of a kubernetes manifest file, you ca
 
 First retreive kubernetes configuration for ICP : 
 
-`~/connect2icp.sh`
+`cloudctl login -n default -u admin -p admin1!`
 
 Then check helm version : 
 
@@ -997,73 +1019,12 @@ Results:
 
 ```console 
 # helm version --tls
-Client: &version.Version{SemVer:"v2.9.1", GitCommit:"20adb27c7c5868466912eebdf6664e7390ebe710", GitTreeState:"clean"}
-Server: &version.Version{SemVer:"v2.9.1+icp", GitCommit:"843201eceab24e7102ebb87cb00d82bc973d84a7", GitTreeState:"clean"}
+Client: &version.Version{SemVer:"v2.12.3", GitCommit:"eecf22f77df5f65c823aacd2dbd30ae6c65f186e", GitTreeState:"clean"}
+Server: &version.Version{SemVer:"v2.12.3+icp", GitCommit:"34e12adfe271fd157db8f9745affe84c0f603809", GitTreeState:"clean"}
 
 ```
 
-> If you don't see the client and servers numbers or an error, then proceed to the helm installation.
-
-### Installing helm (optional)
-
-Helm is a client/server application : Helm client and Tiller server.
-Before we can run any chart with helm, we should proceed to some installation and configuration.
-
-Download the Helm client:
-
-```console
-cd
-curl -O https://storage.googleapis.com/kubernetes-helm/helm-v2.9.1-linux-amd64.tar.gz
-tar -vxhf helm-v2.9.1-linux-amd64.tar.gz
-export PATH=/root/linux-amd64:$PATH
-```
-
-Then set an environment variable:
-
-```console
-export HELM_HOME=/root/.helm
-```
-
-You should Initialize Helm
-
-`helm init --client-only`
-
-Results:
-
-```console
-# helm init --client-only
-Creating /root/.helm/repository
-Creating /root/.helm/repository/cache
-Creating /root/.helm/repository/local
-Creating /root/.helm/plugins
-Creating /root/.helm/starters
-Creating /root/.helm/cache/archive
-Creating /root/.helm/repository/repositories.yaml
-Adding stable repo with URL: https://kubernetes-charts.storage.googleapis.com
-Adding local repo with URL: http://127.0.0.1:8879/charts
-$HELM_HOME has been configured at /root/.helm.
-Not installing Tiller due to 'client-only' flag having been set
-Happy Helming!
-
-```
-
-After you have initialize helm client. Try the following command to see the version:
-
-`helm version --tls`
-
-> Reminder : Don't forget `--tls` in all your helm commands
-
-Results:
-
-```console 
-# helm version --tls
-Client: &version.Version{SemVer:"v2.9.1", GitCommit:"20adb27c7c5868466912eebdf6664e7390ebe710", GitTreeState:"clean"}
-Server: &version.Version{SemVer:"v2.9.1+icp", GitCommit:"843201eceab24e7102ebb87cb00d82bc973d84a7", GitTreeState:"clean"}
-
-```
-
-> The helm Client and server should be the same version (i.e. **version 2.9.1**)
-> If you get some X509 error the also type that command: `cp ~/.kube/mycluster/*.pem ~/.helm/`
+> If you don't see the client and servers numbers or an error, then proceed to the helm installation in APPENDIX.
 
 Another important step is to access to the ICP container registry.
 
@@ -1078,6 +1039,8 @@ Results:
 WARNING! Using --password via the CLI is insecure. Use --password-stdin.
 Login Succeeded
 ```
+
+
 
 
 
@@ -1109,17 +1072,15 @@ Look at **values.yaml** and **modify it**.
 Replace the **service section** and choose a port (like 30073 for instance) with the following code:
 
 ```console
- service:
-  name: hellonginx-service
+service:
   type: NodePort
   externalPort: 80
-  internalPort: 80
   nodePort: 30073
 ```
 
 The main content for **values.yaml** is as follows:
 
-```
+```yaml
 # Default values for hellonginx.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
@@ -1131,11 +1092,12 @@ image:
   tag: stable
   pullPolicy: IfNotPresent
 
+nameOverride: ""
+fullnameOverride: ""
+
 service:
-  name: hellonginx-service
   type: NodePort
-  externalPort: 80  
-  internalPort: 80  
+  externalPort: 80
   nodePort: 30073
 
 ingress:
@@ -1143,7 +1105,7 @@ ingress:
   annotations: {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
-  path: /
+  paths: []
   hosts:
     - chart-example.local
   tls: []
@@ -1178,7 +1140,7 @@ Review deployment template:
 
 **Don't change anything.**
 
-```
+```yaml
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
@@ -1237,36 +1199,40 @@ Then review the **service template**:
 
 Change the **-port section** with the following code (don't introduce any TAB in the file):
 
-        - port: {{ .Values.service.externalPort }}
-          targetPort: {{ .Values.service.internalPort }}
-          protocol: TCP
-          nodePort: {{ .Values.service.nodePort }}
-          name: {{ .Values.service.name }}
+```yaml
+ports:
+  - port: {{ .Values.service.externalPort }}
+    nodePort: {{ .Values.service.nodePort }}
+    targetPort: http
+    protocol: TCP
+    name: http
+```
 > **Notice :** There is 3 ports to define when using nodePort
 
 So the service should look as follows:
 
-```
+```yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "hellonginx.fullname" . }}
+  name: {{ include "hellonginx.fullname" . }}
   labels:
-    app: {{ template "hellonginx.name" . }}
-    chart: {{ template "hellonginx.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    app.kubernetes.io/name: {{ include "hellonginx.name" . }}
+    helm.sh/chart: {{ include "hellonginx.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
   type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.externalPort }}
-      targetPort: {{ .Values.service.internalPort }}
-      protocol: TCP
       nodePort: {{ .Values.service.nodePort }}
-      name: {{ .Values.service.name }}
+      targetPort: http
+      protocol: TCP
+      name: http
   selector:
-    app: {{ template "hellonginx.name" . }}
-    release: {{ .Release.Name }}
+    app.kubernetes.io/name: {{ include "hellonginx.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+
 ```
 
 ### 3. Check the chart
@@ -1477,18 +1443,17 @@ Successfully packaged chart and saved it to: /root/hellonginx-0.1.0.tgz
 **Login** to the master:
 `cloudctl login -a https://mycluster.icp:8443 --skip-ssl-validation`
 
-Then, use the **cloudctl catalog**command to load the chart:
+Then, use the **cloudctl catalog** command to load the chart:
 `cloudctl catalog load-helm-chart --archive /root/hellonginx-0.1.0.tgz`
 
 Results:
 
 ``` 
 # cloudctl catalog load-helm-chart --archive /root/hellonginx-0.1.0.tgz
-Loading helm chart
-Loaded helm chart
+Loading Helm chart
+Loaded Helm chart
 
-Synch charts
-Synch started
+Synch charts on repo: local-charts
 OK
 ```
 
@@ -1528,7 +1493,7 @@ Congratulations, you have successfully completed this Containers lab ! You've de
 
 ---
 
-# appendix A - How to connect to a cluster
+# APPENDIX A - How to connect to a cluster
 
 You need to setup the endpoint to tell the kubectl command where is the ICP Cluster and what are the correct certificates.
 To do so, go to the ICP console and select your profile on the right hand:
@@ -1543,7 +1508,7 @@ These 5 lines contain a token that change every **12 hours**. So then, you gener
 
 A **connect2icp.sh** script is provided to avoid this problem. 
 
-# appendix B : Changing ICP admin password
+# APPENDIX B : Changing ICP admin password
 
 This tutorial describes how to change the admin password.
 
@@ -1593,7 +1558,7 @@ Locate the **admin-password** and change the existing encrypted password with th
 Don't change anything else in the file.
 Save your work : **escape  :wq**
 
-# appendix C - Building Docker Images
+# APPENDIX C - Building Docker Images
 
 Type the following command and you will see both the client (CLI) and the server (engine).
 
@@ -1894,6 +1859,113 @@ root        27    15  0 15:03 pts/0    00:00:00 ps -ef
 Don't forget to **exit** from the container:
 
 `# exit`
+
+## APPENDIX D: Install `cloudcli` on your laptop
+
+ On your laptop, type the following curl command : (don't forget to change the ipaddress):
+
+Go to : 
+
+<https://ipaddress:8443/console/tools/cli>
+
+![1561018767050](../images/1561018767050.png)
+
+Or
+
+**Mac** : 
+
+`curl -kLo cloudctl-darwin-amd64-v3.2.0-634 https://ipaddress:8443/api/cli/cloudctl-darwin-amd64`
+
+**Linux** :
+
+`curl -kLo cloudctl-linux-amd64-v3.2.0-634 https://ipaddress:8443/api/cli/cloudctl-linux-amd64`
+
+**Windows** : 
+
+`curl -kLo cloudctl-win-amd64-v3.2.0-634.exe https://ipaddress:8443/api/cli/cloudctl-win-amd64.exe`
+
+Results:
+
+```console 
+# curl -kLo cloudctl-linux-amd64-v3.2.0-634 https://169.50.200.91:8443/api/cli/cloudct
+l-linux-amd64
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 36.9M  100 36.9M    0     0  84.0M      0 --:--:-- --:--:-- --:--:-- 84.0M
+
+```
+
+Now execute the following commands to change cloudctl to executable and to move that CLI to a directory included in your PATH variable.
+
+```
+chmod 755 /root/cloudctl-linux-amd64-v3.2.0-634
+mv /root/cloudctl-linux-amd64-v3.2.0-634 /usr/local/bin/cloudctl
+```
+
+
+
+## APPENDIX E : Installing helm (optional)
+
+Helm is a client/server application : Helm client and Tiller server.
+Before we can run any chart with helm, we should proceed to some installation and configuration.
+
+Download the Helm client:
+
+```console
+cd
+curl -O https://storage.googleapis.com/kubernetes-helm/helm-v2.9.1-linux-amd64.tar.gz
+tar -vxhf helm-v2.9.1-linux-amd64.tar.gz
+export PATH=/root/linux-amd64:$PATH
+```
+
+Then set an environment variable:
+
+```console
+export HELM_HOME=/root/.helm
+```
+
+You should Initialize Helm
+
+`helm init --client-only`
+
+Results:
+
+```console
+# helm init --client-only
+Creating /root/.helm/repository
+Creating /root/.helm/repository/cache
+Creating /root/.helm/repository/local
+Creating /root/.helm/plugins
+Creating /root/.helm/starters
+Creating /root/.helm/cache/archive
+Creating /root/.helm/repository/repositories.yaml
+Adding stable repo with URL: https://kubernetes-charts.storage.googleapis.com
+Adding local repo with URL: http://127.0.0.1:8879/charts
+$HELM_HOME has been configured at /root/.helm.
+Not installing Tiller due to 'client-only' flag having been set
+Happy Helming!
+
+```
+
+After you have initialize helm client. Try the following command to see the version:
+
+`helm version --tls`
+
+> Reminder : Don't forget `--tls` in all your helm commands
+
+Results:
+
+```console 
+# helm version --tls
+Client: &version.Version{SemVer:"v2.9.1", GitCommit:"20adb27c7c5868466912eebdf6664e7390ebe710", GitTreeState:"clean"}
+Server: &version.Version{SemVer:"v2.9.1+icp", GitCommit:"843201eceab24e7102ebb87cb00d82bc973d84a7", GitTreeState:"clean"}
+
+```
+
+> The helm Client and server should be the same version (i.e. **version 2.9.1**)
+> If you get some X509 error the also type that command: `cp ~/.kube/mycluster/*.pem ~/.helm/`
+
+
 
 ## End of Appendix
 

@@ -11,17 +11,17 @@
 ## Prerequisites
 This set of instructions requires that docker is already installed and docker commands can be run from a bash shell or a command line. You can get more information at the [Docker website](https://www.docker.com/get-docker)
 
->***Note:*** This lab assumes that you are running this from a "clean" environment. Clean means that you have not used docker with the images in this lab. This is important for someone who hasn't seen docker so they can see the activity as images are downloaded.
+>***Note:*** This lab assumes that you are running on the virtual server we provided you. As IBM Cloud Private is installed on this VM, you will see many containers running. 
+>
+>#### **<u>Be careful not to delete containers, images or process unless specified</u>** 
 
 
 
 ## Lab1 - Working with Docker
 
-
-
 ### 1. Check Docker version
 
-Launch a shell or a command line and confirm that docker is installed.
+Connect to your server with `ssh` and confirm that docker is installed.
 
 The version number isn't particularly important.
 However, you can see both the client (CLI) and the server (engine).
@@ -31,28 +31,27 @@ However, you can see both the client (CLI) and the server (engine).
 Output:
 
 ```console
-docker version
-Client: Docker Engine - Community
- Version:           18.09.1
- API version:       1.39
- Go version:        go1.10.6
- Git commit:        4c52b90
- Built:             Wed Jan  9 19:33:12 2019
- OS/Arch:           darwin/amd64
- Experimental:      false
+# docker version
+Client:
+ Version:      18.03.1-ce
+ API version:  1.37
+ Go version:   go1.9.5
+ Git commit:   9ee9f40
+ Built:        Thu Apr 26 07:17:20 2018
+ OS/Arch:      linux/amd64
+ Experimental: false
+ Orchestrator: swarm
 
-Server: Docker Engine - Community
+Server:
  Engine:
-  Version:          18.09.1
-  API version:      1.39 (minimum version 1.12)
-  Go version:       go1.10.6
-  Git commit:       4c52b90
-  Built:            Wed Jan  9 19:41:49 2019
-  OS/Arch:          linux/amd64
-  Experimental:     true
+  Version:      18.03.1-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.9.5
+  Git commit:   9ee9f40
+  Built:        Thu Apr 26 07:15:30 2018
+  OS/Arch:      linux/amd64
+  Experimental: false
 ```
-
-
 
 If you receive an error then go back to the **PrepareLab.md** document to install Docker on your system. 
 
@@ -207,12 +206,12 @@ Also notice that the -d in the run command with launch the container as **detach
 
 Notice only the first part of that long hex id is displayed. Typically this is more than enough to uniquely identify that container. `docker ps` provides information about when the container was created, how long it has been running, then name of the image as well as the name of the container. Note that each container must have a unique name. You can specify a name for each container as long as it is unique.
 
-`docker ps | grep couchdb` or `docker ps`
+`docker ps | grep couchdb` 
 
 Output:
 
 ```console 
-docker ps               
+# docker ps | grep couchdb              
 CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                          NAMES
 272d409a806c        couchdb             "tini -- /docker-ent…"   3 minutes ago       Up 3 minutes        4369/tcp, 5984/tcp, 9100/tcp   xenodochial_heisenberg
 ```
@@ -230,7 +229,7 @@ Launch another container for the couchdb image.
 Output:
 
 ```console 
-> docker run -d couchdb
+# docker run -d couchdb
 fd511f9cd8965395bfcb652d6a10b5eec5c0b4479950064d7e238420c8099a6b
 ```
 
@@ -240,12 +239,12 @@ Did you notice how quickly the second instance started? There was no need to dow
 
 ### 9. Two couchDB containers  
 
-`docker ps | grep couchdb` or just `docker ps`
+`docker ps | grep couchdb` 
 
 Outpout:
 
 ```console 
-> docker ps
+# docker ps | grep couchdb
 CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                          NAMES
 fd511f9cd896        couchdb             "tini -- /docker-ent…"   4 minutes ago       Up 4 minutes        4369/tcp, 5984/tcp, 9100/tcp   cocky_jones
 272d409a806c        couchdb             "tini -- /docker-ent…"   13 minutes ago      Up 13 minutes       4369/tcp, 5984/tcp, 9100/tcp   xenodochial_heisenberg
@@ -258,7 +257,7 @@ fd511f9cd896        couchdb             "tini -- /docker-ent…"   4 minutes ago
 
 The containers look similar, but they have unique names and unique ids. 
 
-Stop the most recent container and then check to see what's running.
+Stop the most recent **couch_db** container and then check to see what's running.
 
 `docker stop fd511f9cd896 `
 
@@ -271,12 +270,12 @@ fd511f9cd896
 
 Then check the container list:
 
-`docker ps | grep couchdb`or `docker ps`
+`docker ps | grep couchdb`
 
 Output:
 
 ```console
-docker ps
+# docker ps | grep couchdb
 CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                          NAMES
 272d409a806c        couchdb             "tini -- /docker-ent…"   19 minutes ago      Up 19 minutes       4369/tcp, 5984/tcp, 9100/tcp   xenodochial_heisenberg
 ```
@@ -292,12 +291,12 @@ Stop the other container and see what is running.
 
  `docker stop 272d409a806c`
 
- `docker ps | grep couchdb` or `docker ps`
+ `docker ps | grep couchdb` 
 
 Output:
 
 ```console 
-docker ps
+docker ps | grep couchdb
 CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
 ```
 
@@ -309,15 +308,14 @@ We have no more couchDB running constainer.
 
  Notice that the images still exist.
 
- `docker images`
+ `docker images | grep couchdb`
 
 Output:
 
 ```console
-> docker images
+> docker images | grep couchdb
 REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
 couchdb             latest              3bfb066ff4c5        19 hours ago        205MB
-hello-world         latest              fce289e99eb9        3 weeks ago         1.84kB
 ```
 
 >  You can filter the images by they names : `docker images couchdb`   
@@ -482,10 +480,10 @@ Notice the various steps that the build process goes through to build out your i
 
 If you run a docker images command now, you will see the myimage image listed in the output as shown below:
 
-`docker images`
+`docker images | grep latest`
 
 ```console
-> docker images
+> docker images  | grep latest
 REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
 myimage             latest              e50f1efaafdc        4 minutes ago       1.2MB
 hello-world         latest              fce289e99eb9        3 weeks ago         1.84kB
@@ -493,6 +491,8 @@ busybox             latest              3a093384ac30        3 weeks ago         
 ```
 
 You can notice that we have pulled busybox image and created myimage ! The images are very tiny.
+
+> **Note** : On the virtual server, you will see images used by IBM Cloud Private. You can ignore at this step other images.
 
 You can now launch a container, any time via the standard docker run command:
 
@@ -635,11 +635,9 @@ Commercial support is available at
 
 Or you can also open a browser on your laptop and type :
 
-http://localhost:8081/ 
+[http://*ip_address*:8081/](http://*ip_address*:8081/ ) 
 
-
-
-![Launching the web server](./../images/nginx2.png)
+![1560959001142](../images/1560959001142.png)
 
 ###3. Troubleshooting containers  
 

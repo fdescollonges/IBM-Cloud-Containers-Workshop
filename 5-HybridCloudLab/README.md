@@ -28,7 +28,7 @@ This lab assumes that you have ICP installed and configured.
 
 First run the following command to connect to your ICP instance :
 
-`~/connect2icp.sh`
+`cloudctl login -u admin -p admin1! -n default`
 
 Go to your home directory : 
 
@@ -44,14 +44,14 @@ Use the `redis-master-deployment.yaml` file to create a [deployment](https://kub
 
 1. Use the [redis-master-deployment.yaml](redis-master-deployment.yaml) file to create the Redis master deployment in your Kubernetes cluster by running the `kubectl apply -f` *`filename`* command:
 
-    ```console
+    ```bash
     root@iccws101:~/ICPGuestbook# kubectl apply -f redis-master-deployment.yaml
     deployment.apps/redis-master created
     ```
 
 2. To verify that the redis-master controller is up, list the deployments you created in the cluster with the `kubectl get deployment` command (if you don't specify a `--namespace`, the `default` namespace will be used. The same below):
 
-    ```console
+    ```bash
     root@iccws101:~/ICPGuestbook# kubectl get deployment
     NAME           DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
     redis-master   1         1         1            1           51s
@@ -61,7 +61,7 @@ Use the `redis-master-deployment.yaml` file to create a [deployment](https://kub
 
 3. To verify that the redis-master pod is running, list the pods you created in cluster with the `kubectl get pods` command:
 
-    ```console
+    ```bash
     root@iccws101:~/ICPGuestbook# kubectl get pods
     NAME                            READY   STATUS    RESTARTS   AGE
     redis-master-7b5cc58fc8-x6m2b   1/1     Running   0          54m
@@ -79,14 +79,14 @@ Services find the pods to load balance based on pod labels. The pod that you cre
 
 1. Use the [redis-master-service.yaml](redis-master-service.yaml) file to create the service in your Kubernetes cluster by running the `kubectl apply -f` *`filename`* command:
 
-    ```console
+    ```bash
     root@iccws101:~/ICPGuestbook# kubectl apply -f redis-master-service.yaml
     service/redis-master created
     ```
 
 2. To verify that the redis-master service is up, list the services you created in the cluster with the `kubectl get services` command:
 
-    ```console
+    ```bash
     root@iccws101:~/ICPGuestbook# kubectl get services
     NAME           TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)    AGE
     kubernetes     ClusterIP   10.0.0.1      <none>        443/TCP    47h
@@ -103,7 +103,7 @@ The Redis master we created earlier is a single pod (REPLICAS = 1), while the Re
 
 1. Use the file [redis-slave-deployment.yaml](redis-slave-deployment.yaml) to create the deployment by running the `kubectl apply -f` *`filename`* command:
 
-    ```console
+    ```bash
     root@iccws101:~/ICPGuestbook# kubectl apply -f redis-slave-deployment.yaml
     Error from server (InternalError): error when creating "redis-slave-deployment.yaml": Internal error occurred: admission webhook "trust.hooks.securityenforcement.admission.cloud.ibm.com" denied the request:
     Deny "docker.io/kubernetes/redis-slave:v2", no matching repositories in ClusterImagePolicy and no ImagePolicies in the "default" namespace
@@ -151,14 +151,14 @@ spec:
 
 ​	`kubectl apply -f guestbook-imagepolicy.yaml`
 
-```
+```bash
 root@iccws101:~/ICPGuestbook# kubectl apply -f guestbook-imagepolicy.yaml
 imagepolicy.securityenforcement.admission.cloud.ibm.com/guestbookimagepolicy created
 ```
 
 Re execute  `kubectl apply -f redis-slave-deployment.yaml` to create the Redis slave deployment.
 
-```console
+```bash
 root@iccws101:~/ICPGuestbook# kubectl apply -f redis-slave-deployment.yaml
 deployment.apps/redis-slave created
 ```
@@ -167,7 +167,7 @@ deployment.apps/redis-slave created
 
 1. To verify that the redis-slave deployment is running, run the `kubectl get deployment` command:
 
-    ```console
+    ```bash
     root@iccws101:~/ICPGuestbook# kubectl get deployment
     NAME           DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
     redis-master   1         1         1            1           21m
@@ -186,7 +186,7 @@ deployment.apps/redis-slave created
 
 2. To verify that the Redis master and slaves pods are running, run the `kubectl get pods` command:
 
-    ```console
+    ```bash
     root@iccws101:~/ICPGuestbook# kubectl get pods
     NAME                            READY   STATUS    RESTARTS   AGE
     redis-master-7b5cc58fc8-phhdh   1/1     Running   0          21m
@@ -203,14 +203,14 @@ Just like the master, we want to have a service to proxy connections to the read
 
 1. Use the [redis-slave-service.yaml](redis-slave-service.yaml) file to create the Redis slave service by running the `kubectl create -f` *`filename`* command:
 
-    ```console
+    ```bash
     root@iccws101:~/ICPGuestbook# kubectl create -f redis-slave-service.yaml
     service/redis-slave created
     ```
 
 2. To verify that the redis-slave service is up, list the services you created in the cluster with the `kubectl get services` command:
 
-    ```console
+    ```bash
     root@iccws101:~/ICPGuestbook# kubectl get services
     NAME           TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
     kubernetes     ClusterIP   10.0.0.1       <none>        443/TCP    47h
@@ -228,7 +228,7 @@ This is a simple Go `net/http` ([negroni](https://github.com/codegangsta/negroni
 
 1. Use the [guestbook-deployment.yaml](guestbook-deployment.yaml) file to create the guestbook deployment by running the `kubectl apply -f` *`filename`* command:
 
-    ```console
+    ```bash
     root@iccws101:~/ICPGuestbook# kubectl apply -f guestbook-deployment.yaml
     deployment.apps/guestbook-v2 created
     ```
@@ -237,7 +237,7 @@ This is a simple Go `net/http` ([negroni](https://github.com/codegangsta/negroni
 
 2. To verify that the guestbook deployment is running, run the `kubectl get deployment` command:
 
-    ```console
+    ```bash
     root@iccws101:~/ICPGuestbook# kubectl get deployment
     NAME           DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
     guestbook-v2   3         3         3            3           57s
@@ -247,7 +247,7 @@ This is a simple Go `net/http` ([negroni](https://github.com/codegangsta/negroni
 
 3. To verify that the guestbook pods are running (it might take up to thirty seconds to create the pods), list the pods you created in cluster with the `kubectl get pods` command:
 
-    ```console
+    ```bash
     root@iccws101:~/ICPGuestbook# kubectl get pods
     NAME                            READY   STATUS    RESTARTS   AGE
     guestbook-v2-96f8b7fb8-5rfpw    1/1     Running   0          105s
@@ -291,50 +291,43 @@ Just like the others, we create a service to group the guestbook pods but this t
 
 Watson Tone Analyzer detects the tone from the words that users enter into the Guestbook app. The tone is converted to the corresponding emoticons.
 
-1. Install the IBM Cloud [command line interface](https://console.bluemix.net/docs/cli/reference/bluemix_cli/get_started.html#getting-started) to access IBM Cloud public on your virtual server :
+1. If not done in previous lab, install the IBM Cloud [command line interface](https://console.bluemix.net/docs/cli/reference/bluemix_cli/get_started.html#getting-started) to access IBM Cloud public on your virtual server :
 
-      curl -sL https://ibm.biz/idt-installer | bash
+      `curl -sL https://ibm.biz/idt-installer | bash`
 
 2. Log in to the IBM Cloud CLI  using your own IBM ID created in preparation lab :[https://github.com/fdescollonges/ContainerWkshp/blob/master/1-PrepareLab.md](https://github.com/fdescollonges/ContainerWkshp/blob/master/1-PrepareLab.md)
 
-   `root@iccws101:~/ICPGuestbook# ibmcloud login`
+   `ibmcloud login`
 
   ```bash
-   root@iccws101:~/ICPGuestbook# ibmcloud login
-   API endpoint: cloud.ibm.com
-   
-   Email> tufih@mailfavorite.com
-   
-   Password>
-   Authenticating...
-   OK
-   
-   Targeted account ICCWS ICCWS's Account (95f04fe00e284449bd3990ee72688be3)
-   
-   Targeted resource group Default
-   
-   Select a region (or press enter to skip):
-   1. au-syd
-   2. jp-tok
-   3. eu-de
-   4. eu-gb
-   5. us-south
-   6. us-east
-   Enter a number> 5
-   Targeted region us-south
-   
-   API endpoint:      https://cloud.ibm.com
-   Region:            us-south
-   User:              tufih@mailfavorite.com
-   Account:           ICCWS ICCWS's Account (95f04fe00e284449bd3990ee72688be3)
-   Resource group:    Default
-   CF API endpoint:
-   Org:
-   Space:
-   
-   Tip: If you are managing Cloud Foundry applications and services
-   - Use 'ibmcloud target --cf' to target Cloud Foundry org/space interactively, or use 'ibmcloud target --cf-api ENDPOINT -o ORG -s SPACE' to target the org/space.
-   - Use 'ibmcloud cf' if you want to run the Cloud Foundry CLI with current IBM Cloud CLI context.
+# ibmcloud login
+API endpoint: https://cloud.ibm.com
+Region: eu-gb
+
+Email> tufih@mailfavorite.com
+
+Password>
+Authenticating...
+OK
+
+Targeted account ICCWS ICCWS's Account (95f04fe00e284449bd3990ee72688be3)
+
+Targeted resource group Default
+
+
+API endpoint:      https://cloud.ibm.com
+Region:            eu-gb
+User:              tufih@mailfavorite.com
+Account:           ICCWS ICCWS's Account (95f04fe00e284449bd3990ee72688be3)
+Resource group:    Default
+CF API endpoint:
+Org:
+Space:
+
+Tip: If you are managing Cloud Foundry applications and services
+- Use 'ibmcloud target --cf' to target Cloud Foundry org/space interactively, or use 'ibmcloud target --cf-api ENDPOINT -o ORG -s SPACE' to target the org/space.
+- Use 'ibmcloud cf' if you want to run the Cloud Foundry CLI with current IBM Cloud CLI context.
+
   ```
 
 3. Create Watson Tone Analyzer in your account.
@@ -501,7 +494,7 @@ analyzer-58644696f7-8tzsj       1/1     Running   0          24s
 
 - Enter the POD in interactive mode (use your own pod id) :
 
-```
+```bash
 root@iccws101:~/ICPGuestbook# kubectl exec -it analyzer-58644696f7-8tzsj /bin/bash
 root@analyzer-58644696f7-8tzsj:/#
 ```

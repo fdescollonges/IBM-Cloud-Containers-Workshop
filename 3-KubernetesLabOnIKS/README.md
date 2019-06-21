@@ -75,9 +75,9 @@ To create a lite cluster:
 
 ## 1.  Select the IBM Kubernetes Service	
 
-From the Catalog, in the Containers category, click **Containers in Kubernetes Cluster**.
+From the Catalog, in the Containers category, click **Kubernetes Service**.
 
-![](./../images/IBMcontainerservice.png)
+![1560959338019](../images/1560959338019.png)
 
 ## 2. Create the service
 
@@ -88,9 +88,9 @@ To use that service, click the blue button(**create**) at the bottom:
 
 ## 3.	Choose a region and a free Cluster
 
-Select **Free** for the cluster type and then the **London** location:
+Select **Free** for the cluster type, the **Resource** group, the **Europe** Geography  and then the **London** Metro:
 
-![image-20190118145616303](../images/image-20190118145616303-7819776.png)
+![1560959430844](../images/1560959430844.png)
 
 Keep **mycluster** as the name of your cluster
 
@@ -119,7 +119,7 @@ The resources that are required to run the cluster, such as **VLANS and IP addre
 
 
 
-# Task 2 : prepare your environment
+# Task 2 : Check requirements
 
 Deploy and manage your own Kubernetes cluster in the cloud. You can automate the deployment, operation, scaling, and monitoring of containerized apps in a cluster of independent compute hosts called worker nodes.
 
@@ -129,17 +129,9 @@ Deploy and manage your own Kubernetes cluster in the cloud. You can automate the
 
 It can take 10min utes to provision your cluster. To make the most of your time, create your cluster before installing all the CLIs. 
 
-On your laptop, you have to prepare your environment to be ready to use Kubernetes and your cluster **mycluster**.
-
-
-
-### 1. Check that docker is running on your laptop
+### 1. Check that docker is running on the VM
 
 `docker version`
-
-If you get an error, go to the PrepareLab.MD file to understand how to install docker on your laptop.
-
-
 
 ### 2. Check that ibmcloud ks (K8S service) and ibmcloud cr (container registry) have been installed
 
@@ -148,29 +140,26 @@ If you get an error, go to the PrepareLab.MD file to understand how to install d
 Results: 
 
 ```bash
-$ ibmcloud plugin list
+# ibmcloud plugin list
 Listing installed plug-ins...
 
-Plugin Name          Version   
-container-registry                     0.1.339   
-container-service/kubernetes-service   0.1.581    
+Plugin Name                            Version   Status
+cloud-functions/wsk/functions/fn       1.0.32
+cloud-object-storage                   1.0.0
+container-registry                     0.1.391
+container-service/kubernetes-service   0.3.49
+dev                                    2.2.0
+sdk-gen                                0.1.12
+   
 ```
 
-
-
-### 3. Install kubectl command line on your laptop
+### 3. Check kubectl command line
 
 **kubectl** is the command that controls Kubernetes objects and resources. This is just one exec file that you must put in the right library on your computer. 
 
 For complete functional compatibility, download the Kubernetes CLI version that matches the Kubernetes cluster version you plan to use. 
 
-> **Normally the kubectl installation has been done during the preparation lab.**
-
-
-
-### 4. Check kubectl 
-
-type the following command :
+Type the following command :
 
 `kubectl version --short`
 
@@ -189,7 +178,7 @@ The error at the end is **normal** because we need to specify how to connect to 
 
 Log into your IBM Cloud account if no already logged in.
 
-`ibmcloud login -a https://api.eu-gb.bluemix.net`
+`ibmcloud login -r eu-gb`
 
 > don't forget to `ibmcloud target -o ORG -s SPACE` where ORG is your email and SPACE is dev. Or use `ibmcloud target --cf` instead.
 
@@ -199,6 +188,14 @@ Then go to your Cluster Region :
 
 `ibmcloud ks region-set uk-south`
 
+Set correct containers API endpoint :
+
+`ibmcloud ks api https://eu-gb.containers.cloud.ibm.com`
+
+To list all your cluster :
+
+`ibmcloud ks clusters`
+
 Set the context for the cluster in your CLI.
 
 `ibmcloud ks cluster-config mycluster`
@@ -206,40 +203,20 @@ Set the context for the cluster in your CLI.
 Output:
 
 ``` bash
-> ibmcloud ks cluster-config mycluster
+# ibmcloud ks cluster-config --cluster mycluster
 OK
-
-The configuration for mycluster was downloaded successfully. Export environment variables to start using Kubernetes.
-
-export KUBECONFIG=/Users/phil/.bluemix/plugins/container-service/clusters/mycluster/kube-config-mil01-mycluster.yml
-```
-
- > IMPORTANT : Set the KUBECONFIG environment variable. **Copy the output from the previous command and paste it in your terminal**. The command output should look similar to the following.
-
- `export KUBECONFIG=/Users/phil/.bluemix/plugins/container-service/clusters/mycluster/kube-config-mil01-mycluster.yml`
-
-On windows, you will get the following result : 
-
-```
-PS C:\Data\iksdemo> ibmcloud ks cluster-config iksdemocluster
-OK
-The configuration for iksdemocluster was downloaded successfully.
+The configuration for mycluster was downloaded successfully.
 
 Export environment variables to start using Kubernetes.
 
-SET KUBECONFIG=C:\Users\FRANCKDescollonges\.bluemix\plugins\container-service\clusters\iksdemocluster\kube-config-dal10-iksdemocluster.yml
-```
-
-With "cmd" shell, use `SET` command like described in the output of the *cluster-config* command : 
+export KUBECONFIG=/root/.bluemix/plugins/container-service/clusters/mycluster/kube-config-mil01-mycluster.yml
 
 ```
-SET KUBECONFIG=C:\Users\FRANCKDescollonges\.bluemix\plugins\container-service\clusters\iksdemocluster\kube-config-dal10-iksdemocluster.yml
-```
 
-On windows, with **<u>powershell</u>**, replace `SET KUBECONFIG` with `$Env:KUBECONFIG` (watch out spaces and quotes): 
+ > **IMPORTANT** : Set the KUBECONFIG environment variable. **Copy the output from the previous command and paste it in your terminal**. The command output should look similar to the following.
 
 ```
-$Env:KUBECONFIG = "C:\Users\FRANCKDescollonges\.bluemix\plugins\container-service\clusters\iksdemocluster\kube-config-dal10-iksdemocluster.yml"
+export KUBECONFIG=/root/.bluemix/plugins/container-service/clusters/mycluster/kube-config-mil01-mycluster.yml
 ```
 
  Verify that you can connect to your cluster by listing your worker nodes.
@@ -249,10 +226,9 @@ $Env:KUBECONFIG = "C:\Users\FRANCKDescollonges\.bluemix\plugins\container-servic
  The output should be :
 
 ```con
-$ kubectl get nodes
-NAME            STATUS    ROLES     AGE       VERSION
-10.144.186.74   Ready     <none>    11m       v1.9.8-2+af27ab4b096122
-
+# kubectl get nodes
+NAME             STATUS   ROLES    AGE   VERSION
+10.144.194.179   Ready    <none>   21m   v1.13.7+IKS
 ```
 
 **YOU ARE NOW CONNECTED TO YOUR CLUSTER** !
@@ -285,13 +261,23 @@ Now login to the IBM Cloud registry:
 Output:
 
 ```bash
-$ ibmcloud cr login
+# ibmcloud cr login
 Logging in to 'registry.eu-gb.bluemix.net'...
 Logged in to 'registry.eu-gb.bluemix.net'.
+
+IBM Cloud Container Registry is adopting new icr.io domain names to align with the rebranding of IBM Cloud for a better user experience. The existing bluemix.net domain names are deprecated, but you can continue to use them for the time being, as an unsupported date will be announced later. For more information about registry domain names, see https://cloud.ibm.com/docs/services/Registry?topic=registry-registry_overview#registry_regions_local
+
+Logging in to 'uk.icr.io'...
+Logged in to 'uk.icr.io'.
+
+IBM Cloud Container Registry is adopting new icr.io domain names to align with the rebranding of IBM Cloud for a better user experience. The existing bluemix.net domain names are deprecated, but you can continue to use them for the time being, as an unsupported date will be announced later. For more information about registry domain names, see https://cloud.ibm.com/docs/services/Registry?topic=registry-registry_overview#registry_regions_local
+
 OK
 ```
 
 
+
+> IBM Cloud Container Registry is adopting new icr.io domain names to align with the rebranding of IBM Cloud for a better user experience. The existing bluemix.net domain names are deprecated, but you can continue to use them for the time being, as an unsupported date will be announced later. For more information about registry domain names, see https://cloud.ibm.com/docs/services/Registry?topic=registry-registry_overview#registry_regions_local
 
 To test our new **private registry**, do the following steps:
 
@@ -305,13 +291,21 @@ To test our new **private registry**, do the following steps:
 
 3. push your image in the private registry
 
-`docker push registry.eu-gb.bluemix.net/<my_namespace>/hello-world:latest`
+`docker push uk.icr.io/<my_namespace>/hello-world:latest`
 
 4. List the images in the private registry
 
 `ibmcloud cr image-list`
 
-![image-20190119190902844](../images/image-20190119190902844-7921342.png)
+```bash
+# ibmcloud cr image-list
+Listing images...
+
+REPOSITORY                       TAG      DIGEST         NAMESPACE   CREATED        SIZE    SECURITY STATUS
+uk.icr.io/tufihreg/hello-world   latest   92c7f9c92844   tufihreg    5 months ago   977 B   Unsupported OS
+
+OK
+```
 
 
 
@@ -333,6 +327,12 @@ If you get an error message like "error: You must be logged in to the server (Un
 
 **Create a directory** on your computer and move to that directory.
 
+`cd`
+
+`mkdir iksgs`
+
+`cd iksgs`
+
 Get and download this github repository into that directory :
 
 `git clone https://github.com/IBM/container-service-getting-started-wt.git`
@@ -347,12 +347,12 @@ Build the image locally and tag it with the name that you want to use on the  ku
 
 `cd "container-service-getting-started-wt/Lab 1"`
 
-`docker build -t registry.eu-gb.bluemix.net/<namespace>/hello1 .`
+`docker build -t uk.icr.io/<namespace>/hello1 .`
 
 Output is:
 
 ```
-$ docker build -t registry.eu-gb.bluemix.net/imgreg/hello1 .
+$ docker build -t uk.icr.io/tufihreg/hello1 .
 Sending build context to Docker daemon  15.36kB
 Step 1/6 : FROM node:9.4.0-alpine
  ---> b5f94997f35f
@@ -377,35 +377,34 @@ Successfully tagged registry.eu-gb.bluemix.net/imgreg/hello1:latest
 
 To see the image, use the following command:
 
-`docker images registry.eu-gb.bluemix.net/<namespace>/hello1:latest`
+`docker images uk.icr.io/<namespace>/hello1:latest`
 
 Example:
 
- ```
-$ docker images registry.eu-gb.bluemix.net/imgreg/hello1:latest
-REPOSITORY                                 TAG                 IMAGE ID            CREATED             SIZE
-registry.eu-gb.bluemix.net/imgreg/hello1   latest              51c706fdc0c1        2 months ago        74.1MB
+ ```bash
+# docker images uk.icr.io/tufihreg/hello1:latest
+REPOSITORY                  TAG                 IMAGE ID            CREATED              SIZE
+uk.icr.io/tufihreg/hello1   latest              64f2c2c3560f        About a minute ago   76.1MB
  ```
 
 ### 4. push the image to the registry. 
 
 Push your image into the private registry :
 
-
-`docker push registry.eu-gb.bluemix.net/<namespace>/hello1:latest`
+`docker push uk.icr.io/<namespace>/hello1:latest`
 
  Your output should look like this.
 
 ```
-$ docker push registry.eu-gb.bluemix.net/imgreg/hello1
-The push refers to repository [registry.eu-gb.bluemix.net/imgreg/hello1]
-57eebb8b0417: Pushed 
-05e20323e508: Layer already exists 
-d200459bdbd0: Layer already exists 
-0804854a4553: Layer already exists 
-6bd4a62f5178: Pushed 
-9dfa40a0da3b: Layer already exists 
-latest: digest: sha256:4d754d9b243818185bb18a5b25f41bf1a2eb3ea7ad3efcdafbe1b204664b56f7 size: 1576
+# docker push uk.icr.io/tufihreg/hello1
+The push refers to repository [uk.icr.io/tufihreg/hello1]
+618c96e10396: Pushed
+d4f965d04cac: Pushed
+bcefe6f9fcc4: Pushed
+0804854a4553: Pushed
+6bd4a62f5178: Pushed
+9dfa40a0da3b: Pushed
+latest: digest: sha256:467072ed2265efc3340cbf9ae25a16df205fb180d92e302161610ba70a60b690 size: 1576
 ```
 
 > **IMPORTANT** : be sure that all the layers have been pushed, wait for the digest line at the end.
@@ -439,17 +438,18 @@ You can look around in the dashboard to see all the different resources (pods, n
 
 Use your image to create a kubernetes deployment with the following command.
 
-`kubectl run hello1-deployment --image=registry.eu-gb.bluemix.net/<namespace>/hello1`
+`kubectl run hello1-deployment --image=uk.icr.io/<namespace>/hello1`
 
 Output is :
 
 ```
-$ kubectl run hello1-deployment --image=registry.eu-gb.bluemix.net/imgreg/hello1
-deployment "hello1-deployment" created
+# kubectl run hello1-deployment --image=uk.icr.io/tufihreg/hello1
+kubectl run --generator=deployment/apps.v1 is DEPRECATED and will be removed in a future version. Use kubectl run --generator=run-pod/v1 or kubectl create instead.
+deployment.apps/hello1-deployment created
 ```
 You can also look at the dashboard to see the deployment:
 
-![expose service](../images/deployk.png)
+![1560962388384](../images/1560962388384.png)
 
 ### 7. Create a service 
 
@@ -507,9 +507,29 @@ Or look at the dashboard:
 
 ### 9. NodePort number 32509
 
-Yours may be different. Open a Firefox browser window or tab and go to the URL of your node with your NodePort number, such as `http://159.122.181.117:32509`. Your output should look like this.
+Yours may be different. Open a Firefox browser window or tab and go to the URL of your worker node with your NodePort number, such as `http://159.122.181.117:32509`. Your output should look like this.
 
 ![Helloworld](../images/browser1.png)
+
+Note : To retreive external IP, run : `kubectl get nodes -o wide`
+
+```
+# kubectl get nodes -o wide
+
+NAME             STATUS   ROLES    AGE   VERSION       INTERNAL-IP      EXTERNAL-IP       OS-IMAGE             KERNEL-VERSION      CONTAINER-RUNTIME
+10.144.194.179   Ready    <none>   15h   v1.13.7+IKS   10.144.194.179   159.122.175.220   Ubuntu 16.04.6 LTS   4.4.0-150-generic   containerd://1.2.6
+```
+
+or
+
+```
+kubectl get nodes -o jsonpath='{range .items[*]}{.status.addresses[?(@.type=="ExternalIP")].address}{"\n"}'
+```
+```
+# kubectl get nodes -o jsonpath='{ran
+ge .items[*]}{.status.addresses[?(@.type=="ExternalIP")].address}{"\n"}'
+159.122.175.220
+```
 
 ### 10. Application troubleshooting 
 
@@ -745,6 +765,12 @@ Waiting for rollout to finish: 9 of 10 updated replicas are available...
 deployment "hello1" successfully rolled out
 ```
 
+Or with Kubernetes Dashboard : 
+
+![1561015050241](../../../../IBM%202019/ContainersWorkshop/IBM-Cloud-Containers-Workshop/images/1561015050241.png)
+
+
+
 Finally, use that command to see the result:
 `kubectl get replicasets`
 
@@ -773,8 +799,34 @@ Collect the NodePort and test your new code :
 
 You have learnt how to create a Kubernetes cluster and see how to configure all the necessary tools (CLI, connection) to manage a cluster and the kubernetes resources (PODs, Services). And you have deployed and scaled an application in that kubernetes cluster !
 
-
 # End of the lab
+
+## APPENDIX : Getting cluster configuration on **windows**
+
+On windows, you will get the following result : 
+
+```
+PS C:\Data\iksdemo> ibmcloud ks cluster-config iksdemocluster
+OK
+The configuration for iksdemocluster was downloaded successfully.
+
+Export environment variables to start using Kubernetes.
+
+SET KUBECONFIG=C:\Users\FRANCKDescollonges\.bluemix\plugins\container-service\clusters\iksdemocluster\kube-config-dal10-iksdemocluster.yml
+```
+
+With "cmd" shell, use `SET` command like described in the output of the *cluster-config* command : 
+
+```
+SET KUBECONFIG=C:\Users\FRANCKDescollonges\.bluemix\plugins\container-service\clusters\iksdemocluster\kube-config-dal10-iksdemocluster.yml
+```
+
+On windows, with **<u>powershell</u>**, replace `SET KUBECONFIG` with `$Env:KUBECONFIG` (watch out spaces and quotes): 
+
+```
+$Env:KUBECONFIG = "C:\Users\FRANCKDescollonges\.bluemix\plugins\container-service\clusters\iksdemocluster\kube-config-dal10-iksdemocluster.yml"
+```
+
 ---
 # IBM Cloud Container Workshop
 ---
