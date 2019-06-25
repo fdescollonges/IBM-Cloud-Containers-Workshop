@@ -287,7 +287,7 @@ To test our new **private registry**, do the following steps:
 
 2. tag the hello-world image with a name containing your private registry name :
 
-`docker tag hello-world registry.eu-gb.bluemix.net/<my_namespace>/hello-world:latest`
+`docker tag hello-world uk.icr.io/<my_namespace>/hello-world:latest`
 
 3. push your image in the private registry
 
