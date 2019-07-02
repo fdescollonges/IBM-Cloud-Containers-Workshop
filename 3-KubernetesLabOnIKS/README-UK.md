@@ -88,11 +88,9 @@ To use that service, click the blue button(**create**) at the bottom:
 
 ## 3.	Choose a region and a free Cluster
 
-Select **Free** for the cluster type, the **Default** Resource group, the **North America** Geography  and then the **Dallas** Metro:
+Select **Free** for the cluster type, the **Resource** group, the **Europe** Geography  and then the **London** Metro:
 
-
-
-![1562058703797](../images/1562058703797.png)
+![1560959430844](../images/1560959430844.png)
 
 Keep **mycluster** as the name of your cluster
 
@@ -180,7 +178,7 @@ The error at the end is **normal** because we need to specify how to connect to 
 
 Log into your IBM Cloud account if no already logged in.
 
-`ibmcloud login -r us-south`
+`ibmcloud login -r eu-gb`
 
 > don't forget to `ibmcloud target -o ORG -s SPACE` where ORG is your email and SPACE is dev. Or use `ibmcloud target --cf` instead.
 
@@ -188,11 +186,11 @@ Log into your IBM Cloud account if no already logged in.
 
 Then go to your Cluster Region :
 
-`ibmcloud ks region-set us-south`
+`ibmcloud ks region-set uk-south`
 
 Set correct containers API endpoint :
 
-`ibmcloud ks api https://containers.cloud.ibm.com`
+`ibmcloud ks api https://eu-gb.containers.cloud.ibm.com`
 
 To list all your cluster :
 
@@ -264,13 +262,13 @@ Output:
 
 ```bash
 # ibmcloud cr login
-Logging in to 'registry.ng.bluemix.net'...
-Logged in to 'registry.ng.bluemix.net'.
+Logging in to 'registry.eu-gb.bluemix.net'...
+Logged in to 'registry.eu-gb.bluemix.net'.
 
 IBM Cloud Container Registry is adopting new icr.io domain names to align with the rebranding of IBM Cloud for a better user experience. The existing bluemix.net domain names are deprecated, but you can continue to use them for the time being, as an unsupported date will be announced later. For more information about registry domain names, see https://cloud.ibm.com/docs/services/Registry?topic=registry-registry_overview#registry_regions_local
 
-Logging in to 'us.icr.io'...
-Logged in to 'us.icr.io'.
+Logging in to 'uk.icr.io'...
+Logged in to 'uk.icr.io'.
 
 IBM Cloud Container Registry is adopting new icr.io domain names to align with the rebranding of IBM Cloud for a better user experience. The existing bluemix.net domain names are deprecated, but you can continue to use them for the time being, as an unsupported date will be announced later. For more information about registry domain names, see https://cloud.ibm.com/docs/services/Registry?topic=registry-registry_overview#registry_regions_local
 
@@ -289,11 +287,11 @@ To test our new **private registry**, do the following steps:
 
 2. tag the hello-world image with a name containing your private registry name :
 
-`docker tag hello-world us.icr.io/<my_namespace>/hello-world:latest`
+`docker tag hello-world uk.icr.io/<my_namespace>/hello-world:latest`
 
 3. push your image in the private registry
 
-`docker push us.icr.io/<my_namespace>/hello-world:latest`
+`docker push uk.icr.io/<my_namespace>/hello-world:latest`
 
 4. List the images in the private registry
 
@@ -304,7 +302,7 @@ To test our new **private registry**, do the following steps:
 Listing images...
 
 REPOSITORY                       TAG      DIGEST         NAMESPACE   CREATED        SIZE    SECURITY STATUS
-us.icr.io/tufihreg/hello-world   latest   92c7f9c92844   tufihreg    5 months ago   977 B   Unsupported OS
+uk.icr.io/tufihreg/hello-world   latest   92c7f9c92844   tufihreg    5 months ago   977 B   Unsupported OS
 
 OK
 ```
@@ -349,12 +347,12 @@ Build the image locally and tag it with the name that you want to use on the  ku
 
 `cd "container-service-getting-started-wt/Lab 1"`
 
-`docker build -t us.icr.io/<namespace>/hello1 .`
+`docker build -t uk.icr.io/<namespace>/hello1 .`
 
 Output is:
 
 ```
-$ docker build -t us.icr.io/tufihreg/hello1 .
+$ docker build -t uk.icr.io/tufihreg/hello1 .
 Sending build context to Docker daemon  15.36kB
 Step 1/6 : FROM node:9.4.0-alpine
  ---> b5f94997f35f
@@ -374,32 +372,32 @@ Step 6/6 : CMD node app.js
  ---> Using cache
  ---> 51c706fdc0c1
 Successfully built 51c706fdc0c1
-Successfully tagged us.icr.io/tufihreg/hello1:latest
+Successfully tagged registry.eu-gb.bluemix.net/imgreg/hello1:latest
 ```
 
 To see the image, use the following command:
 
-`docker images us.icr.io/<namespace>/hello1:latest`
+`docker images uk.icr.io/<namespace>/hello1:latest`
 
 Example:
 
  ```bash
-# docker images us.icr.io/tufihreg/hello1:latest
+# docker images uk.icr.io/tufihreg/hello1:latest
 REPOSITORY                  TAG                 IMAGE ID            CREATED              SIZE
-us.icr.io/tufihreg/hello1   latest              64f2c2c3560f        About a minute ago   76.1MB
+uk.icr.io/tufihreg/hello1   latest              64f2c2c3560f        About a minute ago   76.1MB
  ```
 
 ### 4. push the image to the registry. 
 
 Push your image into the private registry :
 
-`docker push us.icr.io/<namespace>/hello1:latest`
+`docker push uk.icr.io/<namespace>/hello1:latest`
 
  Your output should look like this.
 
 ```
-# docker push us.icr.io/tufihreg/hello1
-The push refers to repository [us.icr.io/tufihreg/hello1]
+# docker push uk.icr.io/tufihreg/hello1
+The push refers to repository [uk.icr.io/tufihreg/hello1]
 618c96e10396: Pushed
 d4f965d04cac: Pushed
 bcefe6f9fcc4: Pushed
@@ -440,12 +438,12 @@ You can look around in the dashboard to see all the different resources (pods, n
 
 Use your image to create a kubernetes deployment with the following command.
 
-`kubectl run hello1-deployment --image=us.icr.io/<namespace>/hello1`
+`kubectl run hello1-deployment --image=uk.icr.io/<namespace>/hello1`
 
 Output is :
 
 ```
-# kubectl run hello1-deployment --image=us.icr.io/tufihreg/hello1
+# kubectl run hello1-deployment --image=uk.icr.io/tufihreg/hello1
 kubectl run --generator=deployment/apps.v1 is DEPRECATED and will be removed in a future version. Use kubectl run --generator=run-pod/v1 or kubectl create instead.
 deployment.apps/hello1-deployment created
 ```
@@ -520,6 +518,17 @@ Note : To retreive external IP, run : `kubectl get nodes -o wide`
 
 NAME             STATUS   ROLES    AGE   VERSION       INTERNAL-IP      EXTERNAL-IP       OS-IMAGE             KERNEL-VERSION      CONTAINER-RUNTIME
 10.144.194.179   Ready    <none>   15h   v1.13.7+IKS   10.144.194.179   159.122.175.220   Ubuntu 16.04.6 LTS   4.4.0-150-generic   containerd://1.2.6
+```
+
+or
+
+```
+kubectl get nodes -o jsonpath='{range .items[*]}{.status.addresses[?(@.type=="ExternalIP")].address}{"\n"}'
+```
+```
+# kubectl get nodes -o jsonpath='{ran
+ge .items[*]}{.status.addresses[?(@.type=="ExternalIP")].address}{"\n"}'
+159.122.175.220
 ```
 
 ### 10. Application troubleshooting 
@@ -625,7 +634,7 @@ To do so, use the following commands :
 
 To do so, use the following commands :
 
-`kubectl run hello1-deployment --image=us.icr.io/<namespace>/hello1`
+`kubectl run hello1-deployment --image=registry.eu-gb.bluemix.net/<namespace>/hello1`
 
 ### 3. Scale the application
 
@@ -703,15 +712,15 @@ If you are in "Lab 1" directory, you need to go to "Lab 2" directory:
 
 Build a new version (2) of that application: 
 
-`docker build -t us.icr.io/<namespace>/hello1:2 .`
+`docker build -t registry.eu-gb.bluemix.net/<namespace>/hello1:2 .`
 
 Then push the new version into the registry:
 
-`docker push us.icr.io/<namespace>/hello1:2`
+`docker push registry.eu-gb.bluemix.net/<namespace>/hello1:2`
 
 Using kubectl, you can now update your deployment to use the latest image. kubectl allows you to change details about existing resources with the set subcommand. We can use it to change the image being used.
 
-`kubectl set image deployment/hello1-deployment hello1-deployment=us.icr.io/<namespace>/hello1:2`
+`kubectl set image deployment/hello1-deployment hello1-deployment=registry.eu-gb.bluemix.net/<namespace>/hello1:2`
 
 Note that a pod could have multiple containers, in which case each container will have its own name. Multiple containers can be updated at the same time. 
 

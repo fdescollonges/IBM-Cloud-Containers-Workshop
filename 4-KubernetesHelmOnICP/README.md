@@ -102,6 +102,118 @@ The **Catalog** shows Charts that you can visit (it could take a few seconds to 
 
 You can look at the (helm) catalog and visit some entries (but don't create any application at the moment).
 
+### ICP Command line tool : cloudctl
+
+This command can be used to configure and manage IBM Cloud Private. We have also installed the **cloudctl** command on the virtual server you will use.
+
+If you need to install cloudctl locally, look at the appendix at the end of this lab
+
+Execute the **cloudctl** command for the first time 
+
+`cloudctl`
+
+Results:
+
+```console 
+# cloudctl
+NAME:
+   cloudctl - A command line tool to interact with IBM Cloud Private
+
+USAGE:
+[environment variables] cloudctl [global options] command [arguments...] [command options]
+
+VERSION:
+   v3.2.0-634+de52bd77a803c0a673b9bfb7368fc8bfc7483e48
+
+COMMANDS:
+   api          View the API endpoint and API version for the service.
+   catalog      Manage catalog
+   cm           Manage cluster
+   completion   Generate an auto-completion script for the specified shell (bash or zsh).
+   config       Write default values to the configuration.
+   helm-init    Prints the configuration of the HELM_HOST setting for Helm.
+   iam          Manage identities and access to resources
+   login        Log user in.
+   logout       Log user out.
+   mc           Multicluster Manager commands
+   metering     Download Metering reports
+   plugin       Manage plugins
+   pm           Manage passwords
+   target       Set or view the targeted namespace.
+   tokens       Display the OAuth tokens for the current session. Run `cloudctl login` to retrieve the tokens.
+   version      Check CLI and API version compatibility.
+   help
+
+Enter 'cloudctl help [command]' for more information about a command.
+
+ENVIRONMENT VARIABLES:
+   CLOUDCTL_COLOR=false                     Do not colorize output
+   CLOUDCTL_HOME=path/to/dir                Path to config directory
+   CLOUDCTL_TRACE=true                      Print API request diagnostics to stdout
+   CLOUDCTL_TRACE=path/to/trace.log         Append API request diagnostics to a log file
+
+GLOBAL OPTIONS:
+   --help, -h                         Show help
+
+```
+
+Among all sub-commands in **cloudctl**, there are some commands to manage the infrastructure components like :
+
+- cluster
+- workers (adding, removing ...)
+- registry (docker image management )
+- helm repositories
+
+Before using the **cloudctl** with the master, you must login to the master:
+
+`cloudctl login -a https://mycluster.icp:8443 --skip-ssl-validation`
+
+> For the login : admin/admin1!
+
+```console
+# cloudctl login -a https://mycluster.icp:8443 --skip-ssl-validation
+
+Username> admin
+
+Password>
+Authenticating...
+OK
+
+Targeted account mycluster Account (id-mycluster-account)
+
+Select a namespace:
+1. cert-manager
+2. default
+3. ibmcom
+4. icp-system
+5. istio-system
+6. kube-public
+7. kube-system
+8. microclimate
+9. microclimate-pipeline-deployments
+10. multicluster-endpoint
+11. services
+12. ws-icp
+Enter a number> 2
+Targeted namespace default
+
+Configuring kubectl ...
+Property "clusters.mycluster" unset.
+Property "users.mycluster-user" unset.
+Property "contexts.mycluster-context" unset.
+Cluster "mycluster" set.
+User "mycluster-user" set.
+Context "mycluster-context" created.
+Switched to context "mycluster-context".
+OK
+
+Configuring helm: /root/.helm
+OK
+
+```
+
+
+
 ### Kubernetes command line tool : KUBECTL
 
 We now need to configure kubectl to get access to the cluster. An alternative method can be used (see Appendix A : How to get connected to the cluster) if you are interested.
@@ -169,118 +281,6 @@ Client Version: v1.13.5+icp
 Server Version: v1.13.7+IKS
 ```
 
-You need to log
-
-### ICP Command line tool : cloudctl
-
-This command can be used to configure and manage IBM Cloud Private. We have also installed the **cloudctl** command on the virtual server you will use.
-
-If you need to install cloudctl locally, look at the appendix at the end of this lab
-
-```
-chmod 755 /root/cloudctl-linux-amd64-3.1.2-1203
-mv /root/cloudctl-linux-amd64-3.1.2-1203 /usr/local/bin/cloudctl
-```
-
-Execute the **cloudctl** command for the first time 
-
-`cloudctl`
-
-Results:
-
-```console 
-# cloudctl
-NAME:
-   cloudctl - A command line tool to interact with IBM Cloud Private
-
-USAGE:
-[environment variables] cloudctl [global options] command [arguments...] [command options]
-
-VERSION:
-   v3.2.0-634+de52bd77a803c0a673b9bfb7368fc8bfc7483e48
-
-COMMANDS:
-   api          View the API endpoint and API version for the service.
-   catalog      Manage catalog
-   cm           Manage cluster
-   completion   Generate an auto-completion script for the specified shell (bash or zsh).
-   config       Write default values to the configuration.
-   helm-init    Prints the configuration of the HELM_HOST setting for Helm.
-   iam          Manage identities and access to resources
-   login        Log user in.
-   logout       Log user out.
-   mc           Multicluster Manager commands
-   metering     Download Metering reports
-   plugin       Manage plugins
-   pm           Manage passwords
-   target       Set or view the targeted namespace.
-   tokens       Display the OAuth tokens for the current session. Run `cloudctl login` to retrieve the tokens.
-   version      Check CLI and API version compatibility.
-   help
-
-Enter 'cloudctl help [command]' for more information about a command.
-
-ENVIRONMENT VARIABLES:
-   CLOUDCTL_COLOR=false                     Do not colorize output
-   CLOUDCTL_HOME=path/to/dir                Path to config directory
-   CLOUDCTL_TRACE=true                      Print API request diagnostics to stdout
-   CLOUDCTL_TRACE=path/to/trace.log         Append API request diagnostics to a log file
-
-GLOBAL OPTIONS:
-   --help, -h                         Show help
-
-```
-
-
-
-Before using the **cloudctl** with the master, you must login to the master:
-
-`cloudctl login -a https://mycluster.icp:8443 --skip-ssl-validation`
-
-> For the login : admin/admin1!
-
-```console
-# cloudctl login -a https://mycluster.icp:8443 --skip-ssl-validation
-
-Username> admin
-
-Password>
-Authenticating...
-OK
-
-Targeted account mycluster Account (id-mycluster-account)
-
-Select a namespace:
-1. cert-manager
-2. default
-3. ibmcom
-4. icp-system
-5. istio-system
-6. kube-public
-7. kube-system
-8. microclimate
-9. microclimate-pipeline-deployments
-10. multicluster-endpoint
-11. services
-12. ws-icp
-Enter a number> 2
-Targeted namespace default
-
-Configuring kubectl ...
-Property "clusters.mycluster" unset.
-Property "users.mycluster-user" unset.
-Property "contexts.mycluster-context" unset.
-Cluster "mycluster" set.
-User "mycluster-user" set.
-Context "mycluster-context" created.
-Switched to context "mycluster-context".
-OK
-
-Configuring helm: /root/.helm
-OK
-
-```
-
 Try this command to show all the worker nodes :
 
 `kubectl get nodes`
@@ -299,26 +299,6 @@ To get help from the kubectl, just type this command:
 
 `kubectl`
 
-With that **cloudctl cm** CLI, you can manage the infrastructure part of the cluster like adding new worker nodes (machine-type-add, worker-add) and so on.
-
-Then you can type some commands concerning your cluster:
-
-`cloudctl cm masters mycluster`
-
-Results
-
-```console
-# cloudctl cm masters mycluster
-ID             Private IP      Machine Type   State   
-mycluster-m1   169.50.200.70   -              deployed 
-```
-
-Among all sub-commands in **cloudctl**, there are some commands to manage the infrastructure components like :
-
-- cluster
-- workers (adding, removing ...)
-- registry (docker image management )
-- helm repositories
 
 # Task 1 : Deploying Apps on ICP with Kubernetes
 
@@ -790,7 +770,7 @@ Take a note of the NodePort in the description. The NodePord is working against 
 
 Or go to the ICP Console, *Workloads* -> *Deployments* and click on *Launch* at the end of the `hello-world` line : 
 
-![1561021170117](assets/1561021170117.png)
+![1561021170117](../images/1561021170117.png) 
 
 ![1561021204305](../images/1561021204305.png)
 
