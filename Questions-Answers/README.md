@@ -1,3 +1,5 @@
+# Q&A
+
 ### How to manager a "Singleton" in a multi cluster environment with IBM MultiCloud Manager
 
 Placement policy in IBM MultiCloud Manager will define the number of clusters on wich your application will be deployed. You can set that policy to 1 to ensure that only one cluster will run this app. 
