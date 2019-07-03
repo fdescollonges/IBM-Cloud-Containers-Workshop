@@ -49,7 +49,7 @@ version 1.0
 
 **Q&A :** 
 
-
+- <https://fdescollonges.github.io/IBM-Cloud-Containers-Workshop/Questions-Answers/>
 
 
 
