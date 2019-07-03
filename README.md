@@ -33,13 +33,12 @@ version 1.0
   + **Demos** Prometheus / Grafana
 
 + _Application Patterns_
-  + MicroServices / Cloud Native Applications
   + Transformation Advisor
-  + Devops : CI/CD
+  + MicroServices / Cloud Native Applications / Devops : CI/CD
   
 + _DevOps **Lab**_
-  + Lab 6 -_Jenkins/Microclimate **Labs ** :_[https://fdescollonges.github.io/IBM-Cloud-Containers-Workshop/6-MicroclimateAndJenkinsLab/](https://fdescollonges.github.io/IBM-Cloud-Containers-Workshop/6-MicroclimateAndJenkinsLab/)
-  + _https://fdescollonges.github.io/IBM-Cloud-Containers-Workshop/7-ToolchainLab/)
+  
+  + Lab 6 - Jenkins/Microclimate **Labs** : [https://fdescollonges.github.io/IBM-Cloud-Containers-Workshop/6-MicroclimateAndJenkinsLab/](https://fdescollonges.github.io/IBM-Cloud-Containers-Workshop/6-MicroclimateAndJenkinsLab/)
   
 + Wrap Up
 
@@ -49,9 +48,7 @@ version 1.0
 
 **Q&A :** 
 
-- <https://fdescollonges.github.io/IBM-Cloud-Containers-Workshop/Questions-Answers/>
-
-
+[**https://fdescollonges.github.io/IBM-Cloud-Containers-Workshop/Questions-Answers/**](https://fdescollonges.github.io/IBM-Cloud-Containers-Workshop/Questions-Answers/)
 
 
 
