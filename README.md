@@ -4,48 +4,54 @@ version 1.0
 
 ## Agenda
 **Day One**
+
 + Introduction / IBM Cloud
-
-+ Docker Overview and **Lab** :
-  + [https://fdescollonges.github.io/IBM-Cloud-Containers-Workshop/1-PrepareLab/](https://fdescollonges.github.io/IBM-Cloud-Containers-Workshop/1-PrepareLab/)
-  + [https://fdescollonges.github.io/IBM-Cloud-Containers-Workshop/2-DockerLab/](https://fdescollonges.github.io/IBM-Cloud-Containers-Workshop/2-DockerLab/)
-
++ Lab 1 - Preparation Lab : [https://fdescollonges.github.io/IBM-Cloud-Containers-Workshop/1-PrepareLab/](https://fdescollonges.github.io/IBM-Cloud-Containers-Workshop/1-PrepareLab/)
++ Container Overview and **Lab** :
+  + Lab 2 - Docker Lab : [https://fdescollonges.github.io/IBM-Cloud-Containers-Workshop/2-DockerLab/](https://fdescollonges.github.io/IBM-Cloud-Containers-Workshop/2-DockerLab/)
 + Kubernetes overview
-
 + Positioning and Offerings
     + ICp / Icp Hosted / IKS / CAC (MultiCloud)
-
-+ IBM Cloud (Public) Container Service
-  + Kubernetes **Lab** on IKS :
-  + [https://fdescollonges.github.io/IBM-Cloud-Containers-Workshop/3-KubernetesLabOnIKS/](https://fdescollonges.github.io/IBM-Cloud-Containers-Workshop/3-KubernetesLabOnIKS/)
-+ IBM Cloud Private Overview
-  +   _Demo_
++ IBM (public) Cloud Container as a Service : IBM Cloud Kubernetes Service
+  + Lab 3 - Kubernetes **Lab** on IKS : [https://fdescollonges.github.io/IBM-Cloud-Containers-Workshop/3-KubernetesLabOnIKS/](https://fdescollonges.github.io/IBM-Cloud-Containers-Workshop/3-KubernetesLabOnIKS/)
+  + Optional : IBM Cloud Toolchain / Pipeline **Lab**: [https://fdescollonges.github.io/IBM-Cloud-Containers-Workshop/7-ToolchainLab/](https://fdescollonges.github.io/IBM-Cloud-Containers-Workshop/7-ToolchainLab/)
 + Wrap Up
 
 **Day Two**
-+ _Helm overview_
-  + Kubernetes & Helm **Lab** on ICP
-  + [https://github.com/fdescollonges/IBM-Cloud-Containers-Workshop/tree/master/4-KubernetesHelmOnICP](https://github.com/fdescollonges/IBM-Cloud-Containers-Workshop/tree/master/4-KubernetesHelmOnICP)
-  + <https://fdescollonges.github.io/IBM-Cloud-Containers-Workshop/5-HybridCloudLab/>
+
++ Helm overview
+  
++ IBM Cloud Private Overview
+  
+  - _Demo_
+  
+  + Lab 4 - Kubernetes & Helm **Lab** on ICP : [https://github.com/fdescollonges/IBM-Cloud-Containers-Workshop/tree/master/4-KubernetesHelmOnICP](https://github.com/fdescollonges/IBM-Cloud-Containers-Workshop/tree/master/4-KubernetesHelmOnICP)
+  + Lab 5 - Hybrid Cloud **Lab** : <https://fdescollonges.github.io/IBM-Cloud-Containers-Workshop/5-HybridCloudLab/>
+  
++ MultiCloud Manager, Monitoring and Logging
+
+  + **Demos** Prometheus / Grafana
+
 + _Application Patterns_
-  + MicroServices /Cloud Native Applications
+  + MicroServices / Cloud Native Applications
   + Transformation Advisor
   + Devops : CI/CD
+  
 + _DevOps **Lab**_
-  + _Jenkins/Microclimate **Labs**_
-  + [https://fdescollonges.github.io/IBM-Cloud-Containers-Workshop/6-MicroclimateAndJenkinsLab/](https://fdescollonges.github.io/IBM-Cloud-Containers-Workshop/6-MicroclimateAndJenkinsLab/)
-  + _Optional : IBM Cloud Toolchain / Pipeline **Demo**_
-  + [https://fdescollonges.github.io/IBM-Cloud-Containers-Workshop/7-ToolchainLab/](https://fdescollonges.github.io/IBM-Cloud-Containers-Workshop/7-ToolchainLab/)
-+ _Monitoring_
-
-  + _**Demos** Prometheus / Grafana_
+  + Lab 6 -_Jenkins/Microclimate **Labs ** :_[https://fdescollonges.github.io/IBM-Cloud-Containers-Workshop/6-MicroclimateAndJenkinsLab/](https://fdescollonges.github.io/IBM-Cloud-Containers-Workshop/6-MicroclimateAndJenkinsLab/)
+  + _https://fdescollonges.github.io/IBM-Cloud-Containers-Workshop/7-ToolchainLab/)
+  
 + Wrap Up
-
-
 
 **LECTURES :**
 
 **<https://github.com/fdescollonges/IBM-Cloud-Containers-Workshop/tree/master/Lectures>**
+
+**Q&A :** 
+
+
+
+
 
 
 
